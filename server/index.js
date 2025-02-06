@@ -1,46 +1,27 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const taskRoutes = require("./routes/taskRoutes");
+
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
+const PORT = process.env.PORT || 5000;
 
-mongoose.connect('mongodb://localhost:27017/tareas', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+// Conectar a MongoDB Atlas (eliminando opciones en desuso)
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("📌 Conectado a MongoDB Atlas"))
+  .catch(err => console.error("❌ Error conectando a MongoDB:", err));
 
-const Tarea = require('./models/Tarea');
+  app.get("/", (req, res) => {
+    res.send("🚀 API de Todo List funcionando correctamente!");
+  });  
 
-app.get('/tareas', async (req, res) => {
-  const tareas = await Tarea.find();
-  res.json(tareas);
-});
+app.use("/api/tasks", taskRoutes);
 
-app.post('/tareas', async (req, res) => {
-  const nuevaTarea = new Tarea(req.body);
-  await nuevaTarea.save();
-  res.json(nuevaTarea);
-});
-
-app.put('/tareas/:id', async (req, res) => {
-  const tarea = await Tarea.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(tarea);
-});
-
-app.delete('/tareas/:id', async (req, res) => {
-  await Tarea.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Tarea eliminada' });
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });

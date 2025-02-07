@@ -1,0 +1,52 @@
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✔ Cambia de color cuando la tarea está completada */
+.task-item.completed {
+  background: rgba(0, 255, 0, 0.2);
+}
+
+/* ✔ Ícono de check */
+.check-icon {
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.check-icon.checked {
+  color: limegreen;
+}
+
+/* ✔ Texto tachado si está completado */
+.task-text {
+  flex-grow: 1;
+  margin: 0 10px;
+  color: white;
+  transition: color 0.3s;
+}
+
+.task-text.completed-text {
+  text-decoration: line-through;
+  color: gray;
+}
+
+/* 🗑 Ícono de papelera */
+.delete-icon {
+  color: red;
+  cursor: pointer;
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.delete-icon:hover {
+  color: darkred;
+}

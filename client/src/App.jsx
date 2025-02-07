@@ -1,46 +1,45 @@
-import { useState, useEffect } from 'react';
-import ListaDeTareas from './components/ListaDeTareas';
-import AñadirTarea from './components/AnadirTarea';
-import axios from 'axios';
-import './App.css';
+import { useState, useEffect } from "react";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
+import "./App.css";
+import axios from "axios"; // Importar axios
 
-function App() {
-  const [tareas, setTareas] = useState([]);
+const App = () => {
+  const [tasks, setTasks] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
+  const [dateTime, setDateTime] = useState(new Date().toLocaleString());
 
   useEffect(() => {
-    const obtenerTareas = async () => {
-      const respuesta = await axios.get('http://localhost:3000/tareas');
-      setTareas(respuesta.data);
+    const fetchTasks = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get("http://localhost:5000/api/tasks");
+        setTasks(data);
+      } catch (error) {
+        console.error("Error al obtener tareas:", error);
+        setError("Error al obtener tareas");
+      } finally {
+        setLoading(false);
+      }
     };
-    obtenerTareas();
+
+    fetchTasks();
+    const interval = setInterval(() => setDateTime(new Date().toLocaleString()), 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const onNuevaTarea = (tarea) => {
-    setTareas([...tareas, tarea]);
-  };
-
-  const onActualizarTarea = async (id) => {
-    const tarea = tareas.find(t => t._id === id);
-    const respuesta = await axios.put(`http://localhost:3000/tareas/${id}`, { ...tarea, completada: !tarea.completada });
-    setTareas(tareas.map(t => t._id === id ? respuesta.data : t));
-  };
-
-  const onEliminarTarea = async (id) => {
-    await axios.delete(`http://localhost:3000/tareas/${id}`);
-    setTareas(tareas.filter(t => t._id !== id));
-  };
-
   return (
-    <div className="App">
-      <h1>Gestor de Tareas</h1>
-      <AñadirTarea onNuevaTarea={onNuevaTarea} />
-      <ListaDeTareas
-        tareas={tareas}
-        onActualizarTarea={onActualizarTarea}
-        onEliminarTarea={onEliminarTarea}
-      />
+    <div className="container">
+      <h1>¡Hola, Keila!</h1>
+      <p>{dateTime}</p>
+      {loading && <p>Cargando tareas...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <TaskForm onAdd={(task) => setTasks([...tasks, task])} />
+      <TaskList tasks={tasks} setTasks={setTasks} />
     </div>
   );
-}
+};
 
 export default App;

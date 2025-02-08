@@ -1,4 +1,4 @@
-/* Fondo */
+
 body {
   background-image: url("./assets/background.jpeg");
   background-size: cover;
@@ -15,7 +15,7 @@ body {
   padding: 20px 0;
 }
 
-/* Contenedor principal */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -28,7 +28,6 @@ body {
   border-radius: 10px;
 }
 
-/* Input y botón con el mismo ancho */
 input,
 button {
   width: 100%;
@@ -50,7 +49,7 @@ button:hover {
   background-color: darkorange;
 }
 
-/* Ajuste responsivo */
+
 @media (min-width: 1024px) {
   body {
     justify-content: flex-start;

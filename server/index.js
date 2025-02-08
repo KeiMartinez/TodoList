@@ -7,11 +7,11 @@ const taskRoutes = require("./routes/taskRoutes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+
 app.use(express.json());
 app.use(cors());
 
-// Conectar a MongoDB Atlas (eliminando opciones en desuso)
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("📌 Conectado a MongoDB Atlas"))
   .catch(err => console.error("❌ Error conectando a MongoDB:", err));

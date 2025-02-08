@@ -1,29 +1,41 @@
 import PropTypes from "prop-types";
 import { FaTrash, FaCheckCircle } from "react-icons/fa";
-import "./TaskItem.css"; 
+import "./TaskItem.css";
 
 const TaskItem = ({ task, onToggle, onDelete }) => {
   return (
-    <div className={`task-item ${task.completed ? "completed" : ""}`}>
-      {/* ✔ Ícono de check para marcar como completada */}
+    <div className="task-item">
+      {}
       <FaCheckCircle 
         className={`check-icon ${task.completed ? "checked" : ""}`} 
-        onClick={() => onToggle(task._id)} 
+        onClick={() => {
+          console.log("✅ Marcando tarea con ID:", task._id);
+          onToggle(task._id);
+        }} 
       />
 
-      {/* ✔ Texto de la tarea */}
+      {}
       <span className={`task-text ${task.completed ? "completed-text" : ""}`}>
         {task.title}
       </span>
 
-      {/* 🗑 Ícono de papelera para eliminar */}
-      <FaTrash 
-        className="delete-icon" 
-        onClick={() => onDelete(task._id)} 
-      />
+      {}
+      <FaTrash
+  className="delete-icon"
+  onClick={(e) => {
+    e.stopPropagation(); 
+    if (window.confirm("¿Seguro que quieres eliminar esta tarea?")) {
+      console.log("🗑 Eliminando tarea con ID:", task._id);
+      onDelete(task._id);
+    }
+  }}
+/>
+
+
     </div>
   );
 };
+
 
 TaskItem.propTypes = {
   task: PropTypes.shape({
